@@ -1,0 +1,38 @@
+{
+  "name": "news-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anjaliSri00/news-backend.git"
+  },
+  "keywords": [],
+  "author": "Anjali Srivastava",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/anjaliSri00/news-backend/issues"
+  },
+  "homepage": "https://github.com/anjaliSri00/news-backend#readme",
+  "dependencies": {
+    "axios": "^1.20.0",
+    "body-parser": "^2.3.0",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "express-validator": "^7.3.2",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.3",
+    "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.71.2",
+    "@typescript-eslint/parser": "^8.71.2",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0"
+  }
+}

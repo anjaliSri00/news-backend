@@ -1,0 +1,8 @@
+node_modules/
+
+src/config/dev.env
+*.env
+
+docker/*conf
+docker/*data
+/.vs
