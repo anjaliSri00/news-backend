@@ -8,7 +8,7 @@ const pool = new Pool({
   password: config.postgres.password,
   port: config.postgres.port,
 });
-console.log('Pool')
+
 pool.on('connect', () => {
   console.log('Connected to the postgres database');
 });

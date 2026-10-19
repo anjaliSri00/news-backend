@@ -22,8 +22,8 @@ async function initializeDatabases () {
   try {
     console.log('Initializing databases...');
     // Run Knex migrations
-      await sqlDb.runMigrations();
-      console.log("Knex migrations are up to date");
+      // await sqlDb.runMigrations();
+      // console.log("Knex migrations are up to date");
 
     // Connect to MongoDB
     // mongoDBClient();
