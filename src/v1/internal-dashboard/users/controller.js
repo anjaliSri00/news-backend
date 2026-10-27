@@ -2,16 +2,22 @@
 
 const customResponse = require("../../../utils/responseHandler");
 const responseMessages = require("../../../utils/responseMessages");
+const internalAuthService = require("./service");
+const { signTokens, setRefreshCookie, setAccessHeader } = require("../../../utils/token");
 
 /* ──────────────────────────────────────────────────────
  * Map service codes → HTTP status + message
  * ────────────────────────────────────────────────────── */
 const CODE_STATUS_MAP = {
-  INVALID_CREDENTIALS: 401, // ← ADDED (was missing — caused 500 on wrong password)
+  INVALID_CREDENTIALS: 401,
   USER_NOT_FOUND: 404,
   ALREADY_INTERNAL: 409,
   INVALID_USER_TYPES: 422,
   NOT_FOUND: 404,
+  // ← NEW: access-related codes
+  INVALID_LEVEL: 422,
+  TARGET_NOT_FOUND: 404,
+  ALREADY_GRANTED: 409,
   SERVER_ERROR: 500,
 };
 
@@ -34,7 +40,6 @@ const create = async (req, res) => {
   const { user_id, user_types } = req.body;
 
   const result = await internalAuthService.createInternalUser(
-    // ← FIXED (was internalUsersService)
     { userId: user_id, userTypes: user_types },
     req.user.id,
   );
@@ -56,7 +61,7 @@ const create = async (req, res) => {
  * GET /internal/auth/list — list internal users
  * ────────────────────────────────────────────────────── */
 const list = async (req, res) => {
-  const result = await internalAuthService.listInternalUsers(); // ← FIXED
+  const result = await internalAuthService.listInternalUsers();
   if (!result.success) return respondFailure(res, result);
   return customResponse(res, 200, "Internal users fetched.", {
     users: result.data,
@@ -67,7 +72,7 @@ const list = async (req, res) => {
  * DELETE /internal/auth/:id — revoke access
  * ────────────────────────────────────────────────────── */
 const revoke = async (req, res) => {
-  const result = await internalAuthService.revokeInternalUser(req.params.id); // ← FIXED
+  const result = await internalAuthService.revokeInternalUser(req.params.id);
   if (!result.success) return respondFailure(res, result);
   return customResponse(res, 200, "Internal user access revoked.", {
     internal_user: result.data,
@@ -83,7 +88,7 @@ const login = async (req, res) => {
   const result = await internalAuthService.internalLogin(email, password);
 
   if (!result.success) {
-    return respondFailure(res, result); // ← simplified (uses the fixed map)
+    return respondFailure(res, result);
   }
 
   const { user, internalUser, userTypes } = result.data;
@@ -109,6 +114,8 @@ const login = async (req, res) => {
       email: user.email,
       is_superadmin: user.is_superadmin,
       user_types: userTypes,
+      access_token: accessToken,
+      refresh_token: refreshToken,
     },
   });
 };
@@ -128,7 +135,7 @@ const me = async (req, res) => {
   const result = await internalAuthService.getInternalMe(req.user.id);
 
   if (!result.success) {
-    return respondFailure(res, result); // ← simplified
+    return respondFailure(res, result);
   }
 
   return customResponse(res, 200, responseMessages.USER_FETCHED, {
@@ -136,11 +143,86 @@ const me = async (req, res) => {
   });
 };
 
+/* ══════════════════════════════════════════════════════════
+ * ACCESS — new functions below
+ * ══════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────
+ * GET /internal/auth/access/tree
+ * Returns the full flows → pages → components → values tree
+ * ────────────────────────────────────────────────────── */
+const accessTree = async (req, res) => {
+  const result = await internalAuthService.getAccessTree();
+  if (!result.success) return respondFailure(res, result);
+  return customResponse(res, 200, "Access tree fetched.", {
+    tree: result.data,
+  });
+};
+
+/* ──────────────────────────────────────────────────────
+ * POST /internal/auth/access/grant
+ * Body: { user_id, level, target_id }
+ * level ∈ "flow" | "page" | "component" | "component_value"
+ * ────────────────────────────────────────────────────── */
+const grantAccess = async (req, res) => {
+  const { user_id, level, target_id } = req.body;
+
+  const result = await internalAuthService.grantAccess({
+    userId: user_id,
+    level,
+    targetId: target_id,
+    grantedBy: req.user.id,
+  });
+
+  if (!result.success) return respondFailure(res, result);
+
+  const status = result.already ? 200 : 201;
+  const message = result.already ? "Access already existed." : "Access granted.";
+
+  return customResponse(res, status, message, { grant: result.data });
+};
+
+/* ──────────────────────────────────────────────────────
+ * POST /internal/auth/access/revoke
+ * Body: { user_id, level, target_id }
+ * ────────────────────────────────────────────────────── */
+const revokeAccess = async (req, res) => {
+  const { user_id, level, target_id } = req.body;
+
+  const result = await internalAuthService.revokeAccess({
+    userId: user_id,
+    level,
+    targetId: target_id,
+  });
+
+  if (!result.success) return respondFailure(res, result);
+  return customResponse(res, 200, "Access revoked.", result.data);
+};
+
+/* ──────────────────────────────────────────────────────
+ * GET /internal/auth/access/user/:userId
+ * Returns everything a user currently has access to
+ * ────────────────────────────────────────────────────── */
+const userAccess = async (req, res) => {
+  const result = await internalAuthService.getUserAccess(req.params.userId);
+  if (!result.success) return respondFailure(res, result);
+  return customResponse(res, 200, "User access fetched.", {
+    access: result.data,
+  });
+};
+
 module.exports = {
+  // Auth
   login,
   logout,
   me,
+  // Internal users
   create,
   list,
   revoke,
+  // Access
+  accessTree,
+  grantAccess,
+  revokeAccess,
+  userAccess,
 };
