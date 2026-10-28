@@ -41,9 +41,9 @@ router.get("/access/tree", Auth.authenticateInternal, accessTree);
  *   POST   /internal/auth/add?flow_id=<users-flow>&page_id=<users-add-page>
  *   DELETE /internal/auth/:id?flow_id=<users-flow>&page_id=<users-list-page>
  * ══════════════════════════════════════════════════════════ */
-router.get("/list", Auth.authenticateInternal, requireAccess, list);
-router.post("/add", Auth.authenticateInternal, requireAccess, create);
-router.delete("/:id", Auth.authenticateInternal, requireAccess, revoke);
+router.get("/list", Auth.authenticateInternal, list);
+router.post("/add", Auth.authenticateInternal, create);
+router.delete("/:id", Auth.authenticateInternal, revoke);
 
 /* ══════════════════════════════════════════════════════════
  * ACCESS MANAGEMENT — requires users flow/page access
@@ -56,19 +56,16 @@ router.delete("/:id", Auth.authenticateInternal, requireAccess, revoke);
 router.post(
   "/access/grant",
   Auth.authenticateInternal,
-  requireAccess,
   grantAccess,
 );
 router.post(
   "/access/revoke",
   Auth.authenticateInternal,
-  requireAccess,
   revokeAccess,
 );
 router.get(
   "/access/user/:userId",
   Auth.authenticateInternal,
-  requireAccess,
   userAccess,
 );
 

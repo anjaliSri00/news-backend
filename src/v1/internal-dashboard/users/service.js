@@ -12,6 +12,20 @@ const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const isUUID = (v) => typeof v === "string" && UUID_REGEX.test(v);
 
+
+const findUserById = async (userId) => {
+  try {
+    const user = await knex("users")
+      .where({ id: userId })
+      .first()
+      .returning("*");
+    return user;
+  } catch (error) {
+    console.error("Error finding user:", error);
+    throw new Error("Error in finding user data");
+  }
+};
+
 /* ══════════════════════════════════════════════════════════
  * Resolve user_types UUIDs → { id, name, display_name }
  * ══════════════════════════════════════════════════════════ */
@@ -708,6 +722,7 @@ const getUserAccess = async (userId) => {
 };
 
 module.exports = {
+  findUserById,
   internalLogin,
   getInternalMe,
   createInternalUser,
