@@ -351,60 +351,36 @@ const deleteEvent = async (id) => {
 };
 
 /* ══════════════════════════════════════════════════════════
- * Restore
+ * Update status — unified publish / unpublish / archive / restore
+ *
+ * Body:
+ *   { status: "draft" | "published" | "archived", restore?: boolean }
+ *
+ *   - status: target status (optional if restore=true and preserving status)
+ *   - restore: true → also clears deleted_at (un-deletes)
  * ══════════════════════════════════════════════════════════ */
-const restoreEvent = async (id) => {
+const updateEventStatus = async (id, { status, restore = false }) => {
   try {
+    // 1. UUID check
     if (!isUUID(id)) {
+      return { success: false, code: "INVALID_INPUT", message: "Invalid event id." };
+    }
+
+    // 2. Status check (if provided)
+    const ALLOWED = ["draft", "published", "archived"];
+    if (status !== undefined && !ALLOWED.includes(status)) {
       return {
         success: false,
-        code: "INVALID_INPUT",
-        message: "Invalid event id.",
+        code: "INVALID_STATUS",
+        message: `Status must be one of: ${ALLOWED.join(", ")}.`,
       };
     }
 
-    const [row] = await knex("events")
-      .where({ id })
-      .whereNotNull("deleted_at")
-      .update({ deleted_at: null, updated_at: knex.fn.now() })
-      .returning("*");
+    // 3. Find event — include deleted only when restore is requested
+    const qb = knex("events").where({ id });
+    if (!restore) qb.whereNull("deleted_at");
 
-    if (!row) {
-      return {
-        success: false,
-        code: "EVENT_NOT_FOUND",
-        message: "Event not found or not deleted.",
-      };
-    }
-
-    return { success: true, data: row };
-  } catch (error) {
-    logger.error("internal restoreEvent error", { error: error.message });
-    return {
-      success: false,
-      code: "SERVER_ERROR",
-      message: "Failed to restore event.",
-    };
-  }
-};
-
-/* ══════════════════════════════════════════════════════════
- * Publish
- * ══════════════════════════════════════════════════════════ */
-const publishEvent = async (id) => {
-  try {
-    if (!isUUID(id)) {
-      return {
-        success: false,
-        code: "INVALID_INPUT",
-        message: "Invalid event id.",
-      };
-    }
-
-    const existing = await knex("events")
-      .where({ id })
-      .whereNull("deleted_at")
-      .first();
+    const existing = await qb.first();
     if (!existing) {
       return {
         success: false,
@@ -412,79 +388,48 @@ const publishEvent = async (id) => {
         message: "Event not found.",
       };
     }
-    if (existing.status === "published") {
-      return {
-        success: false,
-        code: "ALREADY_PUBLISHED",
-        message: "Event is already published.",
-      };
+
+    // 4. Resolve target status (fallback to current if not provided with restore)
+    const newStatus = status !== undefined ? status : existing.status;
+
+    // 5. Idempotency check — nothing to do?
+    const statusUnchanged = existing.status === newStatus;
+    const alreadyActive = !restore || existing.deleted_at === null;
+    if (statusUnchanged && alreadyActive) {
+      return { success: true, data: existing, unchanged: true };
     }
 
-    const [row] = await knex("events")
-      .where({ id })
-      .update({
-        status: "published",
-        published_at: existing.published_at || knex.fn.now(),
-        updated_at: knex.fn.now(),
-      })
-      .returning("*");
-
-    return { success: true, data: row };
-  } catch (error) {
-    logger.error("internal publishEvent error", { error: error.message });
-    return {
-      success: false,
-      code: "SERVER_ERROR",
-      message: "Failed to publish event.",
+    // 6. Build updates
+    const updates = {
+      status: newStatus,
+      updated_at: knex.fn.now(),
     };
-  }
-};
 
-/* ══════════════════════════════════════════════════════════
- * Archive
- * ══════════════════════════════════════════════════════════ */
-const archiveEvent = async (id) => {
-  try {
-    if (!isUUID(id)) {
-      return {
-        success: false,
-        code: "INVALID_INPUT",
-        message: "Invalid event id.",
-      };
+    // Publishing and never published before → set published_at
+    if (newStatus === "published" && !existing.published_at) {
+      updates.published_at = knex.fn.now();
     }
 
-    const existing = await knex("events")
-      .where({ id })
-      .whereNull("deleted_at")
-      .first();
-    if (!existing) {
-      return {
-        success: false,
-        code: "EVENT_NOT_FOUND",
-        message: "Event not found.",
-      };
-    }
-    if (existing.status === "archived") {
-      return {
-        success: false,
-        code: "ALREADY_ARCHIVED",
-        message: "Event is already archived.",
-      };
+    // Restore requested → clear soft-delete
+    if (restore && existing.deleted_at) {
+      updates.deleted_at = null;
     }
 
-    const [row] = await knex("events")
-      .where({ id })
-      .update({ status: "archived", updated_at: knex.fn.now() })
-      .returning("*");
+    // 7. Apply
+    const [row] = await knex("events").where({ id }).update(updates).returning("*");
 
-    return { success: true, data: row };
-  } catch (error) {
-    logger.error("internal archiveEvent error", { error: error.message });
     return {
-      success: false,
-      code: "SERVER_ERROR",
-      message: "Failed to archive event.",
+      success: true,
+      data: row,
+      transitions: {
+        from_status: existing.status,
+        to_status: newStatus,
+        was_deleted: existing.deleted_at !== null,
+      },
     };
+  } catch (error) {
+    logger.error("updateEventStatus error", { error: error.message });
+    return { success: false, code: "SERVER_ERROR", message: "Failed to update event status." };
   }
 };
 
@@ -494,7 +439,5 @@ module.exports = {
   createEvent,
   updateEvent,
   deleteEvent,
-  restoreEvent,
-  publishEvent,
-  archiveEvent,
+  updateEventStatus,
 };

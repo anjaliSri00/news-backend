@@ -1,6 +1,7 @@
 const userService = require("./service");
 const customResponse = require("../../utils/responseHandler");
 const responseMessages = require("../../utils/responseMessages");
+const logger = require("../../utils/logger");
 const { hashPassword, verifyPassword } = require("../../utils/password");
 const {
   signTokens,
@@ -9,257 +10,284 @@ const {
 } = require("../../utils/token");
 
 /* ──────────────────────────────────────────────────────
- * POST /api/v1/users/signup
+ * Code maps
  * ────────────────────────────────────────────────────── */
-const signup = async (req, res) => {
-    console.log("signup called");
-  const { name, mobile, email, password } = req.body;
+const CODE_STATUS_MAP = {
+  INVALID_CREDENTIALS: 401,
+  EMAIL_EXISTS: 409,
+  MOBILE_EXISTS: 409,
+  USER_NOT_FOUND: 404,
+  WRONG_PASSWORD: 401,
+  NO_FIELDS: 400,
+  SERVER_ERROR: 500,
+};
 
-  // 1. Existing user?
-  const existing = await userService.findUserByEmail(email);
-  if (!existing.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
-  }
-  if (existing.data) {
-    return customResponse(res, 409, responseMessages.EMAIL_ALREADY_EXISTS, {});
-  }
+const CODE_MESSAGE_MAP = {
+  INVALID_CREDENTIALS: responseMessages.INVALID_CREDENTIALS,
+  EMAIL_EXISTS: responseMessages.EMAIL_ALREADY_EXISTS,
+  MOBILE_EXISTS: responseMessages.MOBILE_ALREADY_EXISTS,
+  USER_NOT_FOUND: responseMessages.USER_NOT_FOUND,
+  WRONG_PASSWORD: responseMessages.CURRENT_PASSWORD_INCORRECT,
+  NO_FIELDS: responseMessages.NO_VALID_FIELDS,
+  SERVER_ERROR: responseMessages.INTERNAL_SERVER_ERROR,
+};
 
-  // Existing mobile? (only if provided)
-  if (mobile) {
-    const mobileRes = await userService.findUserByMobile(mobile);
-    if (!mobileRes.success)
-      return customResponse(
-        res,
-        500,
-        responseMessages.INTERNAL_SERVER_ERROR,
-        {},
-      );
-    if (mobileRes.data)
-      return customResponse(
-        res,
-        409,
-        "This mobile number is already registered.",
-        {},
-      );
-  }
+const respondFailure = (res, result) => {
+  const status = CODE_STATUS_MAP[result.code] || 500;
+  const message =
+    CODE_MESSAGE_MAP[result.code] ||
+    result.message ||
+    responseMessages.INTERNAL_SERVER_ERROR;
+  return customResponse(res, status, message, {});
+};
 
-  // 2. Resolve subscriber type
-  const typeRes = await userService.findUserTypeByName("subscriber");
-  if (!typeRes.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
-  }
-
-  // 3. Create user
-  const passwordHash = await hashPassword(password);
-  const created = await userService.createUser({
-    name,
-    mobile: mobile || null,
-    email,
-    password_hash: passwordHash,
-    user_type: typeRes.data ? typeRes.data.id : null,
+const respondUnexpected = (res, fnName, error) => {
+  logger.error(`${fnName} controller error`, {
+    error: error.message,
+    stack: error.stack,
   });
+  return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+};
 
-  if (!created.success) {
-    if (created.code === "EMAIL_EXISTS")
+/* ══════════════════════════════════════════════════════════
+ * SIGNUP
+ * ══════════════════════════════════════════════════════════ */
+const signup = async (req, res) => {
+  try {
+    const { name, email, mobile, password } = req.body;
+
+    // Check existing email
+    const existing = await userService.findUserByEmail(email);
+    if (!existing.success) return respondFailure(res, existing);
+    if (existing.data) {
       return customResponse(
         res,
         409,
         responseMessages.EMAIL_ALREADY_EXISTS,
         {},
       );
-    if (created.code === "MOBILE_EXISTS")
-      return customResponse(
-        res,
-        409,
-        "This mobile number is already registered.",
-        {},
-      );
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+    }
+
+    // Check existing mobile (if provided)
+    if (mobile) {
+      const mobileRes = await userService.findUserByMobile(mobile);
+      if (!mobileRes.success) return respondFailure(res, mobileRes);
+      if (mobileRes.data) {
+        return customResponse(
+          res,
+          409,
+          responseMessages.MOBILE_ALREADY_EXISTS,
+          {},
+        );
+      }
+    }
+
+    // Resolve subscriber type
+    const typeRes = await userService.findUserTypeByName("subscriber");
+    if (!typeRes.success) return respondFailure(res, typeRes);
+
+    // Create
+    const passwordHash = await hashPassword(password);
+    const created = await userService.createUser({
+      name,
+      email,
+      mobile: mobile || null,
+      password_hash: passwordHash,
+      user_type: typeRes.data ? typeRes.data.id : null,
+    });
+
+    if (!created.success) return respondFailure(res, created);
+
+    const user = created.data;
+    const { accessToken, refreshToken } = signTokens(user, "website");
+    setRefreshCookie(res, refreshToken);
+    setAccessHeader(res, accessToken);
+
+    return customResponse(res, 201, responseMessages.SIGNUP_SUCCESS, {
+      user: {
+        id: user.id,
+        code: user.code,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+      },
+    });
+  } catch (error) {
+    return respondUnexpected(res, "signup", error);
   }
-
-  const user = created.data;
-
-  // 4. Issue tokens
-  const { accessToken, refreshToken } = signTokens(user, "website");
-  setRefreshCookie(res, refreshToken);
-  setAccessHeader(res, accessToken);
-
-  return customResponse(res, 201, responseMessages.SIGNUP_SUCCESS, {
-    user: {
-      id: user.id,
-      code: user.code,
-      name: user.name,
-      email: user.email,
-      mobile: user.mobile,
-    },
-  });
 };
 
-/* ──────────────────────────────────────────────────────
- * POST /api/v1/users/login
- * ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+ * LOGIN
+ * ══════════════════════════════════════════════════════════ */
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const result = await userService.findUserByEmail(email);
-  if (!result.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+    const result = await userService.findUserByEmail(email);
+    if (!result.success) return respondFailure(res, result);
+    if (!result.data) {
+      return customResponse(
+        res,
+        401,
+        responseMessages.INVALID_CREDENTIALS,
+        {},
+      );
+    }
+
+    const user = result.data;
+    const ok = await verifyPassword(password, user.password_hash);
+    if (!ok) {
+      return customResponse(res, 401, responseMessages.INVALID_CREDENTIALS, {});
+    }
+
+    await userService.updateLastLogin(user.id);
+
+    const { accessToken, refreshToken } = signTokens(user, "website");
+    setRefreshCookie(res, refreshToken);
+    setAccessHeader(res, accessToken);
+
+    return customResponse(res, 200, responseMessages.LOGIN_SUCCESS, {
+      user: {
+        id: user.id,
+        code: user.code,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      },
+    });
+  } catch (error) {
+    return respondUnexpected(res, "login", error);
   }
-  if (!result.data) {
-    return customResponse(res, 401, responseMessages.INVALID_CREDENTIALS, {});
-  }
-
-  const user = result.data;
-
-  const ok = await verifyPassword(password, user.password_hash);
-  if (!ok) {
-    return customResponse(res, 401, responseMessages.INVALID_CREDENTIALS, {});
-  }
-
-  // Non-critical — ignore result
-  await userService.updateLastLogin(user.id);
-
-  const { accessToken, refreshToken } = signTokens(user, "website");
-  setRefreshCookie(res, refreshToken);
-  setAccessHeader(res, accessToken);
-
-  return customResponse(res, 200, responseMessages.LOGIN_SUCCESS, {
-    user: { id: user.id, code: user.code, name: user.name, email: user.email },
-  });
 };
 
-/* ──────────────────────────────────────────────────────
- * POST /api/v1/users/refresh
- * Middleware already rotated tokens — return current user
- * ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+ * REFRESH
+ * ══════════════════════════════════════════════════════════ */
 const refresh = async (req, res) => {
-  const result = await userService.getMe(req.user.id);
-  if (!result.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+  try {
+    const result = await userService.getMe(req.user.id);
+    if (!result.success) return respondFailure(res, result);
+    if (!result.data) {
+      return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
+    }
+    return customResponse(res, 200, responseMessages.TOKEN_REFRESHED, {
+      user: result.data,
+    });
+  } catch (error) {
+    return respondUnexpected(res, "refresh", error);
   }
-  if (!result.data) {
-    return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
-  }
-  return customResponse(res, 200, responseMessages.TOKEN_REFRESHED, {
-    user: result.data,
-  });
 };
 
-/* ──────────────────────────────────────────────────────
- * POST /api/v1/users/logout
- * ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+ * LOGOUT
+ * ══════════════════════════════════════════════════════════ */
 const logout = async (req, res) => {
-  res.clearCookie("refresh-token");
-  return customResponse(res, 200, responseMessages.LOGOUT_SUCCESS, {});
+  try {
+    res.clearCookie("refresh-token");
+    return customResponse(res, 200, responseMessages.LOGOUT_SUCCESS, {});
+  } catch (error) {
+    return respondUnexpected(res, "logout", error);
+  }
 };
 
-/* ──────────────────────────────────────────────────────
- * GET /api/v1/users/me
- * ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+ * ME
+ * ══════════════════════════════════════════════════════════ */
 const me = async (req, res) => {
-  const result = await userService.getMe(req.user.id);
-  if (!result.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+  try {
+    const result = await userService.getMe(req.user.id);
+    if (!result.success) return respondFailure(res, result);
+    if (!result.data) {
+      return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
+    }
+    return customResponse(res, 200, responseMessages.USER_FETCHED, {
+      user: result.data,
+    });
+  } catch (error) {
+    return respondUnexpected(res, "me", error);
   }
-  if (!result.data) {
-    return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
-  }
-  return customResponse(res, 200, responseMessages.USER_FETCHED, {
-    user: result.data,
-  });
 };
 
-/* ──────────────────────────────────────────────────────
- * PATCH /api/v1/users/me
- * ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+ * UPDATE PROFILE
+ * ══════════════════════════════════════════════════════════ */
 const updateProfile = async (req, res) => {
-  const payload = req.body;
-  const allowed = ["name", "mobile", "avatar", "bio", "job_title"];
-  const updates = {};
-  for (const key of allowed) {
-    if (payload[key] !== undefined) updates[key] = payload[key];
-  }
-
-  if (Object.keys(updates).length === 0) {
-    return customResponse(res, 400, "No valid fields to update.", {});
-  }
-
-  if (updates.mobile) {
-    const mobileRes = await userService.findUserByMobile(updates.mobile);
-    if (!mobileRes.success)
-      return customResponse(
-        res,
-        500,
-        responseMessages.INTERNAL_SERVER_ERROR,
-        {},
-      );
-    if (mobileRes.data && mobileRes.data.id !== req.user.id) {
-      return customResponse(
-        res,
-        409,
-        "This mobile number is already registered.",
-        {},
-      );
+  try {
+    const allowed = ["name", "mobile", "avatar", "bio", "job_title"];
+    const updates = {};
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) updates[key] = req.body[key];
     }
-  }
 
-  const result = await userService.updateUser(req.user.id, updates);
-  if (!result.success) {
-    if (result.code === "EMAIL_EXISTS" || result.code === "MOBILE_EXISTS") {
-      return customResponse(res, 409, result.message, {});
+    if (Object.keys(updates).length === 0) {
+      return customResponse(res, 400, responseMessages.NO_VALID_FIELDS, {});
     }
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
-  }
-  if (!result.data) {
-    return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
-  }
 
-  const user = result.data;
-  return customResponse(res, 200, "Profile updated successfully.", {
-    user: {
-      id: user.id,
-      code: user.code,
-      name: user.name,
-      mobile: user.mobile,
-      email: user.email,
-      avatar: user.avatar,
-      bio: user.bio,
-      job_title: user.job_title,
-    },
-  });
+    if (updates.mobile) {
+      const mobileRes = await userService.findUserByMobile(updates.mobile);
+      if (!mobileRes.success) return respondFailure(res, mobileRes);
+      if (mobileRes.data && mobileRes.data.id !== req.user.id) {
+        return customResponse(
+          res,
+          409,
+          responseMessages.MOBILE_ALREADY_EXISTS,
+          {},
+        );
+      }
+    }
+
+    const result = await userService.updateUser(req.user.id, updates);
+    if (!result.success) return respondFailure(res, result);
+    if (!result.data) {
+      return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
+    }
+
+    return customResponse(res, 200, responseMessages.PROFILE_UPDATED, {
+      user: result.data,
+    });
+  } catch (error) {
+    return respondUnexpected(res, "updateProfile", error);
+  }
 };
 
-/* ──────────────────────────────────────────────────────
- * POST /api/v1/users/change-password
- * ────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+ * CHANGE PASSWORD
+ * ══════════════════════════════════════════════════════════ */
 const changePassword = async (req, res) => {
-  const { old_password, new_password } = req.body;
+  try {
+    const { old_password, new_password } = req.body;
 
-  const findRes = await userService.findUserById(req.user.id);
-  if (!findRes.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+    const findRes = await userService.findUserById(req.user.id);
+    if (!findRes.success) return respondFailure(res, findRes);
+    if (!findRes.data) {
+      return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
+    }
+
+    const user = findRes.data;
+    const ok = await verifyPassword(old_password, user.password_hash);
+    if (!ok) {
+      return customResponse(
+        res,
+        401,
+        responseMessages.CURRENT_PASSWORD_INCORRECT,
+        {},
+      );
+    }
+
+    const newHash = await hashPassword(new_password);
+    const updateRes = await userService.updateUser(req.user.id, {
+      password_hash: newHash,
+    });
+
+    if (!updateRes.success) return respondFailure(res, updateRes);
+
+    return customResponse(res, 200, responseMessages.PASSWORD_CHANGED, {});
+  } catch (error) {
+    return respondUnexpected(res, "changePassword", error);
   }
-  if (!findRes.data) {
-    return customResponse(res, 404, responseMessages.USER_NOT_FOUND, {});
-  }
-
-  const user = findRes.data;
-
-  const ok = await verifyPassword(old_password, user.password_hash);
-  if (!ok) {
-    return customResponse(res, 401, "Current password is incorrect.", {});
-  }
-
-  const newHash = await hashPassword(new_password);
-  const updateRes = await userService.updateUser(req.user.id, {
-    password_hash: newHash,
-  });
-
-  if (!updateRes.success) {
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
-  }
-
-  return customResponse(res, 200, "Password changed successfully.", {});
 };
 
 module.exports = {

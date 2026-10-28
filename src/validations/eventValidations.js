@@ -219,10 +219,29 @@ const eventSlugParam = [
     .withMessage("Invalid slug"),
 ];
 
+const updateEventStatus = [
+  param("id").isUUID().withMessage("Invalid event id"),
+  body("status")
+    .optional()
+    .isIn(["draft", "published", "archived"])
+    .withMessage("Status must be draft, published, or archived"),
+  body("restore")
+    .optional()
+    .isBoolean().withMessage("Restore must be boolean"),
+  // At least one of status or restore must be present
+  body().custom((_, { req }) => {
+    if (!req.body.status && req.body.restore !== true) {
+      throw new Error("Either status or restore:true must be provided.");
+    }
+    return true;
+  }),
+];
+
 module.exports = {
   createEvent,
   updateEvent,
   listEvents,
   eventIdParam,
   eventSlugParam,
+  updateEventStatus,
 };

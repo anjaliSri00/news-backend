@@ -31,20 +31,11 @@ router.post("/add", validate(validationArray.createEvent), Auth.authenticateInte
 router.put("/:id", validate(validationArray.updateEvent), controller.update);
 
 /* ── LIFECYCLE ────────────────────────────────────────── */
-router.post(
-  "/:id/publish",
-  validate(validationArray.eventIdParam),
-  controller.publish,
-);
-router.post(
-  "/:id/archive",
-  validate(validationArray.eventIdParam),
-  controller.archive,
-);
-router.post(
-  "/:id/restore",
-  validate(validationArray.eventIdParam),
-  controller.restore,
+
+router.patch(
+  "/:id/status",
+  validate(validationArray.updateEventStatus),
+  controller.updateStatus
 );
 
 /* ── DELETE (soft) — must be last so /:id/publish etc. match first ── */
