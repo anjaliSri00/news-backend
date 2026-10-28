@@ -53,6 +53,7 @@ const listEvents = async (query) => {
           "category",
           "tags",
           "status",
+          "article_url",
           "published_at",
           "event_type",
           "start_date",

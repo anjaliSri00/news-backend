@@ -45,6 +45,7 @@ const listEvents = async (query) => {
           "title",
           "slug",
           "excerpt",
+          "article_url",
           "featured_image",
           "category",
           "tags",
