@@ -23,7 +23,7 @@ router.get(
 );
 
 /* WRITE */
-router.post("/add", validate(validationArray.createHomeDecor), controller.create);
+router.post("/add", validate(validationArray.createHomeDecor), Auth.authenticateInternal,controller.create);
 router.put(
   "/:id",
   validate(validationArray.updateHomeDecor),
