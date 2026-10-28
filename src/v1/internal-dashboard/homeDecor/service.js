@@ -58,7 +58,6 @@ const listHomeDecor = async (query) => {
           "room_type",
           "style",
           "layout_type",
-          "products_used",
           "author_id",
           "is_active",
           "views",
@@ -267,9 +266,6 @@ const updateHomeDecor = async (id, payload) => {
       updates.seo = serializeJsonb(payload.seo, {});
     if (payload.extra !== undefined)
       updates.extra = serializeJsonb(payload.extra, {});
-    if (payload.products_used !== undefined) {
-      updates.products_used = serializeJsonb(payload.products_used, []);
-    }
 
     if (payload.slug !== undefined && payload.slug !== existing.slug) {
       updates.slug = await generateUniqueSlug(
