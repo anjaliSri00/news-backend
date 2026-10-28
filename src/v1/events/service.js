@@ -4,7 +4,7 @@
  */
 const knex = require("../../db/sqldb").db;
 const logger = require("../../utils/logger");
-const { isUUID } = require("../../utils/eventHelper");
+const { isUUID } = require("../../utils/contentHelper");
 
 /* ══════════════════════════════════════════════════════════
  * List — published only, paginated, filterable

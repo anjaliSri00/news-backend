@@ -26,9 +26,16 @@ const generateEventCode = () => {
   return `EVT-${year}-${random}`;
 };
 
+const generateHomeDecorCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `HDR-${year}-${random}`;   // HDR-2026-A1B2C3
+};
+
 module.exports = {
   generateCode,
   generateUserCode,
   generateInternalUserCode,
   generateEventCode,
+  generateHomeDecorCode,
 };

@@ -9,7 +9,7 @@ const {
   isUUID,
   generateUniqueSlug,
   serializeJsonb,
-} = require("../../../utils/eventHelper");
+} = require("../../../utils/contentHelper");
 
 /* ══════════════════════════════════════════════════════════
  * List — all statuses, excludes soft-deleted

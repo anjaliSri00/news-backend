@@ -139,6 +139,34 @@ const responseMessages = {
   EVENT_FAILED_STATUS: "Failed to update event status.",
   EVENT_FAILED_VIEWS: "Failed to increment views.",
   EVENT_FAILED_LIKES: "Failed to increment likes.",
+
+  /* ══════════════════════════════════════════════════════════
+   * HOME DECOR
+   * ══════════════════════════════════════════════════════════ */
+  HOME_DECOR_CREATED: "Home decor created.",
+  HOME_DECOR_UPDATED: "Home decor updated.",
+  HOME_DECOR_DELETED: "Home decor deleted.",
+  HOME_DECOR_FETCHED: "Home decor fetched.",
+  HOME_DECORS_FETCHED: "Home decor items fetched.",
+  HOME_DECOR_STATUS_UPDATED: "Home decor status updated.",
+  HOME_DECOR_STATUS_UNCHANGED: "Home decor status unchanged.",
+  HOME_DECOR_NOT_FOUND: "Home decor not found.",
+  HOME_DECOR_NOT_FOUND_OR_DELETED: "Home decor not found or already deleted.",
+  HOME_DECOR_SLUG_EXISTS: "A home decor item with this slug already exists.",
+  HOME_DECOR_NO_CHANGES: "No valid fields to update.",
+  HOME_DECOR_INVALID_ID: "Invalid home decor id.",
+  HOME_DECOR_INVALID_SLUG: "Invalid slug.",
+  HOME_DECOR_INVALID_STATUS:
+    "Status must be one of: draft, published, archived.",
+  HOME_DECOR_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
+  HOME_DECOR_FAILED_FETCH: "Failed to fetch home decor.",
+  HOME_DECOR_FAILED_FETCH_LIST: "Failed to fetch home decor items.",
+  HOME_DECOR_FAILED_CREATE: "Failed to create home decor.",
+  HOME_DECOR_FAILED_UPDATE: "Failed to update home decor.",
+  HOME_DECOR_FAILED_DELETE: "Failed to delete home decor.",
+  HOME_DECOR_FAILED_STATUS: "Failed to update home decor status.",
+  HOME_DECOR_INVALID_LAYOUT: "Layout type must be featured, compact, or medium.",
 };
 
 module.exports = responseMessages;
