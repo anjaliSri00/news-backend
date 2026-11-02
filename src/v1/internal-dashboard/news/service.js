@@ -2,14 +2,14 @@
  * Dashboard news service — full CRUD for all news_types.
  * Access enforced by middleware (requireAccess).
  */
-const knex = require("../../db/sqldb").db;
-const logger = require("../../utils/logger");
-const { generateNewsCode } = require("../../utils/codeGenerator");
+const knex = require("../../../db/sqldb").db;
+const logger = require("../../../utils/logger");
+const { generateNewsCode } = require("../../../utils/codeGenerator");
 const {
   isUUID,
   generateUniqueSlug,
   calculateReadTime,
-} = require("../../utils/contentHelpers");
+} = require("../../../utils/contentHelpers");
 
 /**
  * Clean + validate a category array.
