@@ -154,7 +154,7 @@ const createEvent = async (payload, userId) => {
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
         const baseSlug = payload.slug || payload.title;
-        const slug = await generateUniqueSlug(knex, baseSlug);
+        const slug = await generateUniqueSlug(knex, "events", baseSlug);
         const code = generateEventCode();
 
         const isPublished = payload.status === "published";
