@@ -32,10 +32,18 @@ const generateHomeDecorCode = () => {
   return `HDR-${year}-${random}`;   // HDR-2026-A1B2C3
 };
 
+const generateNewsCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `NWS-${year}-${random}`;
+};
+
+
 module.exports = {
   generateCode,
   generateUserCode,
   generateInternalUserCode,
   generateEventCode,
   generateHomeDecorCode,
+  generateNewsCode,
 };

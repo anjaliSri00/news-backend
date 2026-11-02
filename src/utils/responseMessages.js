@@ -166,7 +166,37 @@ const responseMessages = {
   HOME_DECOR_FAILED_UPDATE: "Failed to update home decor.",
   HOME_DECOR_FAILED_DELETE: "Failed to delete home decor.",
   HOME_DECOR_FAILED_STATUS: "Failed to update home decor status.",
-  HOME_DECOR_INVALID_LAYOUT: "Layout type must be featured, compact, or medium.",
+  HOME_DECOR_INVALID_LAYOUT:
+    "Layout type must be featured, compact, or medium.",
+
+  /* ══════════════════════════════════════════════════════════
+   * NEWS
+   * ══════════════════════════════════════════════════════════ */
+  NEWS_CREATED: "News item created.",
+  NEWS_UPDATED: "News item updated.",
+  NEWS_DELETED: "News item deleted.",
+  NEWS_FETCHED: "News item fetched.",
+  NEWS_LIST_FETCHED: "News fetched.",
+  NEWS_STATUS_UPDATED: "News status updated.",
+  NEWS_STATUS_UNCHANGED: "News status unchanged.",
+  NEWS_NOT_FOUND: "News item not found.",
+  NEWS_NOT_FOUND_OR_DELETED: "News item not found or already deleted.",
+  NEWS_SLUG_EXISTS: "A news item with this slug already exists.",
+  NEWS_NO_CHANGES: "No valid fields to update.",
+  NEWS_INVALID_ID: "Invalid news id.",
+  NEWS_INVALID_SLUG: "Invalid slug.",
+  NEWS_INVALID_NEWS_TYPE: "News type must be trending, special, or latest.",
+  NEWS_INVALID_STATUS: "Status must be one of: draft, published, archived.",
+  NEWS_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
+  NEWS_FAILED_FETCH: "Failed to fetch news.",
+  NEWS_FAILED_CREATE: "Failed to create news.",
+  NEWS_FAILED_UPDATE: "Failed to update news.",
+  NEWS_FAILED_DELETE: "Failed to delete news.",
+  NEWS_FAILED_STATUS: "Failed to update news status.",
+  NEWS_FAILED_VIEWS: "Failed to increment views.",
+  NEWS_INVALID_CATEGORY:
+    "Invalid category. Must be one of: home_decor, events, trends, furniture, projects, products, designers, design_tech, decor, showroom_showcase.",
 };
 
 module.exports = responseMessages;

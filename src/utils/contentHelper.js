@@ -60,4 +60,18 @@ const serializeJsonb = (value, fallback) => {
   return JSON.stringify(value);
 };
 
-module.exports = { isUUID, slugify, generateUniqueSlug, serializeJsonb };
+/**
+ * Estimate reading time from HTML content.
+ * ~200 words per minute. Strips HTML tags first.
+ * Returns integer minutes (min 1).
+ */
+const calculateReadTime = (content) => {
+  if (!content || typeof content !== "string") return 1;
+  const text = content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  if (!text) return 1;
+  const words = text.split(" ").length;
+  return Math.max(1, Math.ceil(words / 200));
+};
+
+
+module.exports = { isUUID, slugify, generateUniqueSlug, serializeJsonb, calculateReadTime };
