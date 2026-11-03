@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const controller = require("./controller");
-const validate = require("../../../middlewares/validatorError");
-const v = require("../../../validations/newsValidations");
+const validate = require("../../middlewares/validatorError");
+const v = require("../../validations/newsValidations");
 
 /* ══════════════════════════════════════════════════════════
  * PUBLIC — no auth

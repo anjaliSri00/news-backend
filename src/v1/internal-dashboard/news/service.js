@@ -9,8 +9,8 @@ const {
   isUUID,
   generateUniqueSlug,
   calculateReadTime,
-} = require("../../../utils/contentHelpers");
-
+} = require("../../../utils/contentHelper");
+const { NEWS_CATEGORIES } = require("../../../common/constants");
 /**
  * Clean + validate a category array.
  * Returns:

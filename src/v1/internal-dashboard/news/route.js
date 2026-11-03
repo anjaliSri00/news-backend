@@ -10,21 +10,22 @@ const v = require("../../../validations/newsValidations");
 //router.use(Auth.authenticateInternal, requireAccess);
 
 /* READ */
-router.get("/list", validate(v.listNews), controller.list);
-router.get("/:id", validate(v.newsIdParam), controller.getOne);
+router.get("/list", validate(v.listNews), Auth.authenticateInternal, controller.list);
+router.get("/:id", validate(v.newsIdParam), Auth.authenticateInternal, controller.getOne);
 
 /* WRITE */
-router.post("/add", validate(v.createNews), controller.create);
-router.put("/:id", validate(v.updateNews), controller.update);
+router.post("/add", validate(v.createNews), Auth.authenticateInternal, controller.create);
+router.put("/:id", validate(v.updateNews), Auth.authenticateInternal, controller.update);
 
 /* LIFECYCLE */
 router.patch(
   "/:id/status",
   validate(v.updateNewsStatus),
+  Auth.authenticateInternal,
   controller.updateStatus,
 );
 
 /* DELETE (last) */
-router.delete("/:id", validate(v.newsIdParam), controller.remove);
+router.delete("/:id", validate(v.newsIdParam), Auth.authenticateInternal, controller.remove);
 
 module.exports = router;

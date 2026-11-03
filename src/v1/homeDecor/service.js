@@ -56,7 +56,6 @@ const listHomeDecor = async (query) => {
           "room_type",
           "style",
           "layout_type",
-          "products_used",
           "views",
           "likes",
         )

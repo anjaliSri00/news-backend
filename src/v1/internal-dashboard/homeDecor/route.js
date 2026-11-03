@@ -15,10 +15,11 @@ const validationArray = require("../../../validations/homeDecorValidation");
  * ══════════════════════════════════════════════════════════ */
 
 /* READ */
-router.get("/", validate(validationArray.listHomeDecor), controller.list);
+router.get("/", validate(validationArray.listHomeDecor), Auth.authenticateInternal, controller.list);
 router.get(
   "/:id",
   validate(validationArray.homeDecorIdParam),
+  Auth.authenticateInternal,
   controller.getOne,
 );
 
@@ -27,6 +28,7 @@ router.post("/add", validate(validationArray.createHomeDecor), Auth.authenticate
 router.put(
   "/:id",
   validate(validationArray.updateHomeDecor),
+  Auth.authenticateInternal,
   controller.update,
 );
 
@@ -34,6 +36,7 @@ router.put(
 router.patch(
   "/:id/status",
   validate(validationArray.updateHomeDecorStatus),
+  Auth.authenticateInternal,
   controller.updateStatus,
 );
 
@@ -41,6 +44,7 @@ router.patch(
 router.delete(
   "/:id",
   validate(validationArray.homeDecorIdParam),
+  Auth.authenticateInternal,
   controller.remove,
 );
 

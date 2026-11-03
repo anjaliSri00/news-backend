@@ -1,7 +1,7 @@
 const service = require("./service");
-const customResponse = require("../../../utils/responseHandler");
-const responseMessages = require("../../../utils/responseMessages");
-const logger = require("../../../utils/logger");
+const customResponse = require("../../utils/responseHandler");
+const responseMessages = require("../../utils/responseMessages");
+const logger = require("../../utils/logger");
 
 const CODE_STATUS_MAP = {
   INVALID_INPUT: 400,

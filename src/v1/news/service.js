@@ -4,7 +4,7 @@
  */
 const knex = require("../../db/sqldb").db;
 const logger = require("../../utils/logger");
-const { isUUID } = require("../../utils/contentHelpers");
+const { isUUID } = require("../../utils/contentHelper");
 
 const PUBLIC_SELECT = [
   "id",
