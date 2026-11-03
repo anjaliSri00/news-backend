@@ -197,6 +197,26 @@ const responseMessages = {
   NEWS_FAILED_VIEWS: "Failed to increment views.",
   NEWS_INVALID_CATEGORY:
     "Invalid category. Must be one of: home_decor, events, trends, furniture, projects, products, designers, design_tech, decor, showroom_showcase.",
+
+  /* ══════════════════════════════════════════════════════════
+   * DESIGNERS
+   * ══════════════════════════════════════════════════════════ */
+  DESIGNER_CREATED: "Designer created.",
+  DESIGNER_UPDATED: "Designer updated.",
+  DESIGNER_DELETED: "Designer deleted.",
+  DESIGNER_FETCHED: "Designer fetched.",
+  DESIGNERS_FETCHED: "Designers fetched.",
+  DESIGNER_STATUS_UPDATED: "Designer status updated.",
+  DESIGNER_STATUS_UNCHANGED: "Designer status unchanged.",
+  DESIGNER_NOT_FOUND: "Designer not found.",
+  DESIGNER_NOT_FOUND_OR_DELETED: "Designer not found or already deleted.",
+  DESIGNER_SLUG_EXISTS: "A designer with this slug already exists.",
+  DESIGNER_NO_CHANGES: "No valid fields to update.",
+  DESIGNER_INVALID_ID: "Invalid designer id.",
+  DESIGNER_INVALID_SLUG: "Invalid slug.",
+  DESIGNER_INVALID_STATUS: "Status must be one of: draft, published, archived.",
+  DESIGNER_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;

@@ -38,6 +38,12 @@ const generateNewsCode = () => {
   return `NWS-${year}-${random}`;
 };
 
+const generateDesignerCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `DSG-${year}-${random}`;   // DSG-2026-A1B2C3
+};
+
 
 module.exports = {
   generateCode,
@@ -46,4 +52,5 @@ module.exports = {
   generateEventCode,
   generateHomeDecorCode,
   generateNewsCode,
+  generateDesignerCode,
 };
