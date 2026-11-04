@@ -11,6 +11,8 @@ const newsRoutes = require("./news/route");
 const internalNewsRoutes = require("./internal-dashboard/news/route");
 const internalDesignersRoutes = require("./internal-dashboard/designers/route");
 const designersRoutes = require("./designers/route");
+const internalDesignTechRoutes = require("./internal-dashboard/designTech/route");
+const designTechRoutes = require("./designTech/route");
 
 // ─── Public ───────────────────────────────────────────────
 router.use('/users', usersRoutes);
@@ -18,6 +20,7 @@ router.use('/events', eventsRoutes);
 router.use('/home-decor', homeDecorRoutes);
 router.use('/news', newsRoutes);
 router.use('/designers', designersRoutes);
+router.use('/design-tech', designTechRoutes);
 
 // ─── Internal Dashboard ───────────────────────────────────
 router.use('/internal-dashboard/users', internalDashboardUsersRoutes);
@@ -25,5 +28,6 @@ router.use('/internal-dashboard/events', internalEventsRoutes);
 router.use('/internal-dashboard/home-decor', internalHomeDecorRoutes);
 router.use('/internal-dashboard/news', internalNewsRoutes);
 router.use('/internal-dashboard/designers', internalDesignersRoutes);
+router.use('/internal-dashboard/design-tech', internalDesignTechRoutes);
 
 module.exports = router;

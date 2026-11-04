@@ -217,6 +217,29 @@ const responseMessages = {
   DESIGNER_INVALID_STATUS: "Status must be one of: draft, published, archived.",
   DESIGNER_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+  /* ══════════════════════════════════════════════════════════
+   * DESIGN TECH
+   * ══════════════════════════════════════════════════════════ */
+  DESIGN_TECH_CREATED: "Design tech entry created.",
+  DESIGN_TECH_UPDATED: "Design tech entry updated.",
+  DESIGN_TECH_DELETED: "Design tech entry deleted.",
+  DESIGN_TECH_FETCHED: "Design tech entry fetched.",
+  DESIGN_TECH_LIST_FETCHED: "Design tech entries fetched.",
+  DESIGN_TECH_STATUS_UPDATED: "Design tech status updated.",
+  DESIGN_TECH_STATUS_UNCHANGED: "Design tech status unchanged.",
+  DESIGN_TECH_VIEWS_INCREMENTED: "Views incremented.",
+  DESIGN_TECH_NOT_FOUND: "Design tech entry not found.",
+  DESIGN_TECH_NOT_FOUND_OR_DELETED:
+    "Design tech entry not found or already deleted.",
+  DESIGN_TECH_SLUG_EXISTS: "A design tech entry with this slug already exists.",
+  DESIGN_TECH_NO_CHANGES: "No valid fields to update.",
+  DESIGN_TECH_INVALID_ID: "Invalid design tech id.",
+  DESIGN_TECH_INVALID_SLUG: "Invalid slug.",
+  DESIGN_TECH_INVALID_STATUS:
+    "Status must be one of: draft, published, archived.",
+  DESIGN_TECH_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;
