@@ -240,6 +240,30 @@ const responseMessages = {
     "Status must be one of: draft, published, archived.",
   DESIGN_TECH_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+  /* ══════════════════════════════════════════════════════════
+   * FURNITURE
+   * ══════════════════════════════════════════════════════════ */
+  FURNITURE_CREATED: "Furniture item created.",
+  FURNITURE_UPDATED: "Furniture item updated.",
+  FURNITURE_DELETED: "Furniture item deleted.",
+  FURNITURE_FETCHED: "Furniture item fetched.",
+  FURNITURE_LIST_FETCHED: "Furniture fetched.",
+  FURNITURE_STATUS_UPDATED: "Furniture status updated.",
+  FURNITURE_STATUS_UNCHANGED: "Furniture status unchanged.",
+  FURNITURE_VIEWS_INCREMENTED: "Views incremented.",
+  FURNITURE_NOT_FOUND: "Furniture item not found.",
+  FURNITURE_NOT_FOUND_OR_DELETED:
+    "Furniture item not found or already deleted.",
+  FURNITURE_SLUG_EXISTS: "A furniture item with this slug already exists.",
+  FURNITURE_NO_CHANGES: "No valid fields to update.",
+  FURNITURE_INVALID_ID: "Invalid furniture id.",
+  FURNITURE_INVALID_SLUG: "Invalid slug.",
+  FURNITURE_INVALID_STATUS:
+    "Status must be one of: draft, published, archived.",
+  FURNITURE_INVALID_YEAR: "Year must be between 1900 and current year.",
+  FURNITURE_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;

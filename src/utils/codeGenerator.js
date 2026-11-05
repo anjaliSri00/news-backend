@@ -50,6 +50,12 @@ const generateDesignTechCode = () => {
   return `DTC-${year}-${random}`;   // DTC-2026-A1B2C3
 };
 
+const generateFurnitureCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `FUR-${year}-${random}`;   // FUR-2026-A1B2C3
+};
+
 module.exports = {
   generateCode,
   generateUserCode,
@@ -59,4 +65,5 @@ module.exports = {
   generateNewsCode,
   generateDesignerCode,
   generateDesignTechCode,
+  generateFurnitureCode,
 };
