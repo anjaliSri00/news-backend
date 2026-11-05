@@ -56,6 +56,12 @@ const generateFurnitureCode = () => {
   return `FUR-${year}-${random}`;   // FUR-2026-A1B2C3
 };
 
+const generateProductCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `PRD-${year}-${random}`;   // PRD-2026-A1B2C3
+};
+
 module.exports = {
   generateCode,
   generateUserCode,
@@ -66,4 +72,5 @@ module.exports = {
   generateDesignerCode,
   generateDesignTechCode,
   generateFurnitureCode,
+  generateProductCode,
 };

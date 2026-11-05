@@ -264,6 +264,32 @@ const responseMessages = {
   FURNITURE_INVALID_YEAR: "Year must be between 1900 and current year.",
   FURNITURE_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+  /* ══════════════════════════════════════════════════════════
+   * PRODUCTS
+   * ══════════════════════════════════════════════════════════ */
+  PRODUCT_CREATED: "Product created.",
+  PRODUCT_UPDATED: "Product updated.",
+  PRODUCT_DELETED: "Product deleted.",
+  PRODUCT_FETCHED: "Product fetched.",
+  PRODUCTS_FETCHED: "Products fetched.",
+  PRODUCT_STATUS_UPDATED: "Product status updated.",
+  PRODUCT_STATUS_UNCHANGED: "Product status unchanged.",
+  PRODUCT_VIEWS_INCREMENTED: "Views incremented.",
+  PRODUCT_NOT_FOUND: "Product not found.",
+  PRODUCT_NOT_FOUND_OR_DELETED: "Product not found or already deleted.",
+  PRODUCT_SLUG_EXISTS: "A product with this slug already exists.",
+  PRODUCT_SKU_EXISTS: "A product with this SKU already exists.",
+  PRODUCT_NO_CHANGES: "No valid fields to update.",
+  PRODUCT_INVALID_ID: "Invalid product id.",
+  PRODUCT_INVALID_SLUG: "Invalid slug.",
+  PRODUCT_INVALID_STATUS: "Status must be one of: draft, published, archived.",
+  PRODUCT_INVALID_AVAILABILITY:
+    "Availability must be: in_stock, out_of_stock, preorder, or discontinued.",
+  PRODUCT_INVALID_PRICE: "Price must be a non-negative number.",
+  PRODUCT_INVALID_CURRENCY: "Currency must be 3 uppercase letters (ISO 4217).",
+  PRODUCT_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;
