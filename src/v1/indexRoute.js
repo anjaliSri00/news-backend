@@ -16,7 +16,7 @@ const designTechRoutes = require("./designTech/route");
 const furnitureRoutes = require("./furniture/route");
 const internalDashboardFurnitureRoutes = require("./internal-dashboard/furniture/route");
 const productRoutes = require("./products/route");
-const internalDashboardProductsRoutes = require("./internal-dashboard/products/routes");
+const internalDashboardProductsRoutes = require("./internal-dashboard/products/route");
 
 // ─── Public ───────────────────────────────────────────────
 router.use('/users', usersRoutes);
