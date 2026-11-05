@@ -24,7 +24,7 @@ router.use('/news', newsRoutes);
 router.use('/designers', designersRoutes);
 router.use('/design-tech', designTechRoutes);
 router.use('/furniture', furnitureRoutes);
-router.use('/products', require('./products/routes'));
+router.use('/products', furnitureRoutes);
 
 // ─── Internal Dashboard ───────────────────────────────────
 router.use('/internal-dashboard/users', internalDashboardUsersRoutes);
@@ -34,6 +34,6 @@ router.use('/internal-dashboard/news', internalNewsRoutes);
 router.use('/internal-dashboard/designers', internalDesignersRoutes);
 router.use('/internal-dashboard/design-tech', internalDesignTechRoutes);
 router.use('/internal-dashboard/furniture', internalDashboardFurnitureRoutes);
-router.use('/internal-dashboard/products', require('./internal-dashboard/products/routes'));
+router.use('/internal-dashboard/products', internalDashboardFurnitureRoutes);
 
 module.exports = router;
