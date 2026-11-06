@@ -290,6 +290,36 @@ const responseMessages = {
   PRODUCT_INVALID_CURRENCY: "Currency must be 3 uppercase letters (ISO 4217).",
   PRODUCT_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+  /* ══════════════════════════════════════════════════════════
+   * TRENDS
+   * ══════════════════════════════════════════════════════════ */
+  TREND_CREATED: "Trend created.",
+  TREND_UPDATED: "Trend updated.",
+  TREND_DELETED: "Trend deleted.",
+  TREND_FETCHED: "Trend fetched.",
+  TRENDS_FETCHED: "Trends fetched.",
+  TREND_STATUS_UPDATED: "Trend status updated.",
+  TREND_STATUS_UNCHANGED: "Trend status unchanged.",
+  TREND_VIEWS_INCREMENTED: "Views incremented.",
+  TREND_NOT_FOUND: "Trend not found.",
+  TREND_NOT_FOUND_OR_DELETED: "Trend not found or already deleted.",
+  TREND_SLUG_EXISTS: "A trend with this slug already exists.",
+  TREND_NO_CHANGES: "No valid fields to update.",
+  TREND_INVALID_ID: "Invalid trend id.",
+  TREND_INVALID_SLUG: "Invalid slug.",
+  TREND_INVALID_STATUS: "Status must be one of: draft, published, archived.",
+  TREND_INVALID_TREND_CATEGORY:
+    "Trend category must be: color, material, style, technology, lifestyle, furniture, interior, or general.",
+  TREND_INVALID_SEASON:
+    "Season must be: spring, summer, autumn, winter, or all_year.",
+  TREND_INVALID_CONFIDENCE: "Confidence level must be: low, medium, or high.",
+  TREND_INVALID_REGION:
+    "Region must be: global, north_america, europe, asia_pacific, latin_america, middle_east, or africa.",
+  TREND_INVALID_COLOR: "Each color must be a valid hex code (#RRGGBB).",
+  TREND_INVALID_YEAR: "Year must be between 2000 and 2100.",
+  TREND_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;

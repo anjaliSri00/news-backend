@@ -62,6 +62,12 @@ const generateProductCode = () => {
   return `PRD-${year}-${random}`;   // PRD-2026-A1B2C3
 };
 
+const generateTrendCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `TRD-${year}-${random}`;   // TRD-2026-A1B2C3
+};
+
 module.exports = {
   generateCode,
   generateUserCode,
@@ -73,4 +79,5 @@ module.exports = {
   generateDesignTechCode,
   generateFurnitureCode,
   generateProductCode,
+  generateTrendCode,
 };
