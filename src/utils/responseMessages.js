@@ -320,6 +320,32 @@ const responseMessages = {
   TREND_INVALID_YEAR: "Year must be between 2000 and 2100.",
   TREND_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+  /* ══════════════════════════════════════════════════════════
+   * PROJECTS
+   * ══════════════════════════════════════════════════════════ */
+  PROJECT_CREATED: "Project created.",
+  PROJECT_UPDATED: "Project updated.",
+  PROJECT_DELETED: "Project deleted.",
+  PROJECT_FETCHED: "Project fetched.",
+  PROJECTS_FETCHED: "Projects fetched.",
+  PROJECT_HIGHLIGHTS_FETCHED: "Project highlights fetched.",
+  PROJECT_STATUS_UPDATED: "Project status updated.",
+  PROJECT_STATUS_UNCHANGED: "Project status unchanged.",
+  PROJECT_VIEWS_INCREMENTED: "Views incremented.",
+  PROJECT_NOT_FOUND: "Project not found.",
+  PROJECT_NOT_FOUND_OR_DELETED: "Project not found or already deleted.",
+  PROJECT_SLUG_EXISTS: "A project with this slug already exists.",
+  PROJECT_NO_CHANGES: "No valid fields to update.",
+  PROJECT_INVALID_ID: "Invalid project id.",
+  PROJECT_INVALID_SLUG: "Invalid slug.",
+  PROJECT_INVALID_STATUS: "Status must be one of: draft, published, archived.",
+  PROJECT_INVALID_TYPE:
+    "Project type must be: residential, commercial, hospitality, public, industrial, mixed_use, or other.",
+  PROJECT_INVALID_PSTATUS:
+    "Project status must be: concept, in_progress, completed, on_hold, or cancelled.",
+  PROJECT_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;

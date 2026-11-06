@@ -19,6 +19,8 @@ const productRoutes = require("./products/routes");
 const internalDashboardProductsRoutes = require("./internal-dashboard/products/routes");
 const internalDashboardTrendsRoutes = require("./internal-dashboard/trends/route");
 const trendsRoutes = require("./trends/route");
+const internalDashboardProjectsRoutes = require("./internal-dashboard/projects/route");
+const projectsRoutes = require("./projects/route");
 
 // ─── Public ───────────────────────────────────────────────
 router.use('/users', usersRoutes);
@@ -30,6 +32,7 @@ router.use('/design-tech', designTechRoutes);
 router.use('/furniture', furnitureRoutes);
 router.use('/products', productRoutes);
 router.use('/trends', trendsRoutes);
+router.use('/projects', projectsRoutes);
 
 // ─── Internal Dashboard ───────────────────────────────────
 router.use('/internal-dashboard/users', internalDashboardUsersRoutes);
@@ -41,5 +44,6 @@ router.use('/internal-dashboard/design-tech', internalDesignTechRoutes);
 router.use('/internal-dashboard/furniture', internalDashboardFurnitureRoutes);
 router.use('/internal-dashboard/products', internalDashboardProductsRoutes);
 router.use('/internal-dashboard/trends', internalDashboardTrendsRoutes);
+router.use('/internal-dashboard/projects', internalDashboardProjectsRoutes);
 
 module.exports = router;
