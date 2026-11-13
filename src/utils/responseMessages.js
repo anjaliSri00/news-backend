@@ -347,7 +347,7 @@ const responseMessages = {
   PROJECT_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
 
-      /* ══════════════════════════════════════════════════════════
+  /* ══════════════════════════════════════════════════════════
    * SHOWROOMS
    * ══════════════════════════════════════════════════════════ */
   SHOWROOM_CREATED: "Showroom created.",
@@ -363,7 +363,30 @@ const responseMessages = {
   SHOWROOM_NO_CHANGES: "No valid fields to update.",
   SHOWROOM_INVALID_ID: "Invalid showroom id.",
   SHOWROOM_INVALID_STATUS: "Status must be one of: draft, published, archived.",
-  SHOWROOM_CODE_GEN_FAILED: "Could not generate unique code/slug. Please try again.",
+  SHOWROOM_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
+
+  /* ══════════════════════════════════════════════════════════
+   * EDITORIALS
+   * ══════════════════════════════════════════════════════════ */
+  EDITORIAL_CREATED: "Editorial created.",
+  EDITORIAL_UPDATED: "Editorial updated.",
+  EDITORIAL_DELETED: "Editorial deleted.",
+  EDITORIAL_FETCHED: "Editorial fetched.",
+  EDITORIALS_FETCHED: "Editorials fetched.",
+  EDITORIAL_STATUS_UPDATED: "Editorial status updated.",
+  EDITORIAL_STATUS_UNCHANGED: "Editorial status unchanged.",
+  EDITORIAL_VIEWS_INCREMENTED: "Views incremented.",
+  EDITORIAL_NOT_FOUND: "Editorial not found.",
+  EDITORIAL_NOT_FOUND_OR_DELETED: "Editorial not found or already deleted.",
+  EDITORIAL_SLUG_EXISTS: "An editorial with this slug already exists.",
+  EDITORIAL_NO_CHANGES: "No valid fields to update.",
+  EDITORIAL_INVALID_ID: "Invalid editorial id.",
+  EDITORIAL_INVALID_SLUG: "Invalid slug.",
+  EDITORIAL_INVALID_STATUS:
+    "Status must be one of: draft, published, archived.",
+  EDITORIAL_CODE_GEN_FAILED:
+    "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;
