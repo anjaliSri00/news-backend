@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("./controller");
-const Auth = require("../../.../middlewares/auth");
-const { requireAccess } = require("../../middlewares/access");
-const validate = require("../../middlewares/validatorError");
-const v = require("../../validations/showroomValidations");
+const Auth = require("../../../middlewares/auth");
+const { requireAccess } = require("../../../middlewares/access");
+const validate = require("../../../middlewares/validatorError");
+const v = require("../../../validations/showroomValidations");
 
 //router.use(Auth.authenticateInternal, requireAccess);
 
