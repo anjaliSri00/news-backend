@@ -74,6 +74,11 @@ const generateProjectCode = () => {
   return `PRJ-${year}-${random}`;
 };
 
+const generateShowroomCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `SHW-${year}-${random}`; 
+};
 
 module.exports = {
   generateCode,

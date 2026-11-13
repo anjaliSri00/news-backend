@@ -346,6 +346,24 @@ const responseMessages = {
     "Project status must be: concept, in_progress, completed, on_hold, or cancelled.",
   PROJECT_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+      /* ══════════════════════════════════════════════════════════
+   * SHOWROOMS
+   * ══════════════════════════════════════════════════════════ */
+  SHOWROOM_CREATED: "Showroom created.",
+  SHOWROOM_UPDATED: "Showroom updated.",
+  SHOWROOM_DELETED: "Showroom deleted.",
+  SHOWROOM_FETCHED: "Showroom fetched.",
+  SHOWROOMS_FETCHED: "Showrooms fetched.",
+  SHOWROOM_STATUS_UPDATED: "Showroom status updated.",
+  SHOWROOM_STATUS_UNCHANGED: "Showroom status unchanged.",
+  SHOWROOM_VIEWS_INCREMENTED: "Views incremented.",
+  SHOWROOM_NOT_FOUND: "Showroom not found.",
+  SHOWROOM_SLUG_EXISTS: "A showroom with this slug already exists.",
+  SHOWROOM_NO_CHANGES: "No valid fields to update.",
+  SHOWROOM_INVALID_ID: "Invalid showroom id.",
+  SHOWROOM_INVALID_STATUS: "Status must be one of: draft, published, archived.",
+  SHOWROOM_CODE_GEN_FAILED: "Could not generate unique code/slug. Please try again.",
 };
 
 module.exports = responseMessages;
