@@ -6,7 +6,7 @@ const {
   generateUniqueSlug,
   serializeJsonb,
   calculateReadTime,
-} = require("../../../utils/contentHelpers");
+} = require("../../../utils/contentHelper");
 
 const cleanStringArray = (arr, maxLen = 100) => {
   if (!Array.isArray(arr)) return [];
