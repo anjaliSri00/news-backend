@@ -80,6 +80,13 @@ const generateShowroomCode = () => {
   return `SHW-${year}-${random}`; 
 };
 
+const generateEditorialCode = () => {
+  const year = new Date().getFullYear();
+  const random = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `EDT-${year}-${random}`; 
+};
+// Add generateEditorialCode to module.exports
+
 module.exports = {
   generateCode,
   generateUserCode,
@@ -93,4 +100,6 @@ module.exports = {
   generateProductCode,
   generateTrendCode,
   generateProjectCode,
+  generateShowroomCode,
+  generateEditorialCode,
 };
