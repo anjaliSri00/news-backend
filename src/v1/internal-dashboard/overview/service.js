@@ -135,7 +135,7 @@ const listLayouts = async (query) => {
     const limit = Math.min(parseInt(query.limit, 10) || 10, 50);
     const skip = (page - 1) * limit;
 
-    const qb = knex("home_overview_layouts").whereNull("deleted_at");
+    const qb = knex("home_overview_layouts");
     if (query.status) qb.where({ status: query.status });
 
     const [rows, countRow] = await Promise.all([
@@ -210,7 +210,6 @@ const updateLayout = async (id, payload) => {
   try {
     const existing = await knex("home_overview_layouts")
       .where({ id })
-      .whereNull("deleted_at")
       .first();
     if (!existing)
       return {
@@ -263,7 +262,7 @@ const deleteLayout = async (id) => {
 const updateLayoutStatus = async (id, { status, restore }) => {
   try {
     const qb = knex("home_overview_layouts").where({ id });
-    if (!restore) qb.whereNull("deleted_at");
+    // if (!restore) qb.whereNull("deleted_at");
     const existing = await qb.first();
     if (!existing)
       return {
