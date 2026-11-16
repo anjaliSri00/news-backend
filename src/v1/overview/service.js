@@ -90,7 +90,7 @@ const getHomeOverview = async () => {
               author: heroLeft.author_name || "Form & Field",
               date: formatDate(heroLeft.published_at),
               read_time: `${heroLeft.read_time} min read`,
-              link: `/${heroLeft._type}s/${heroLeft.slug}`,
+              link: `/${heroLeft._type}/${heroLeft.slug}`,
             }
           : null,
 
@@ -101,7 +101,7 @@ const getHomeOverview = async () => {
           title: item.title,
           date: formatDate(item.published_at),
           read_time: `${item.read_time} min read`,
-          link: `/${item._type}s/${item.slug}`,
+          link: `/${item._type}/${item.slug}`,
         })),
 
         right_radar: [radar1, radar2, radar3].filter(Boolean).map((item) => ({
@@ -110,7 +110,7 @@ const getHomeOverview = async () => {
           title: item.title,
           date: formatDate(item.published_at),
           read_time: `${item.read_time} min read`,
-          link: `/${item._type}s/${item.slug}`,
+          link: `/${item._type}/${item.slug}`,
         })),
 
         editor_note: editorNote
