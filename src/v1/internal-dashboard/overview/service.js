@@ -90,21 +90,14 @@ const getAvailableContent = async (type, query) => {
     if (query.search) {
       const term = `%${query.search}%`;
       qb.where((b) =>
-        b.where("title", "ilike", term).orWhere("name", "ilike", term),
+        b.where("name", "ilike", term),
       );
     }
 
     const [rows, countRow] = await Promise.all([
       qb
         .clone()
-        .select(
-          "id",
-          "title",
-          "slug",
-          "published_at",
-          "read_time",
-          "featured_image_url",
-        )
+        .select("*")
         .orderBy("published_at", "desc")
         .offset(skip)
         .limit(limit),
