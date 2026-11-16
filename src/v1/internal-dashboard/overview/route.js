@@ -46,4 +46,12 @@ router.delete(
   controller.remove,
 );
 
+// Must be placed BEFORE /:id so "available" isn't treated as an ID
+router.get(
+  "/available/:type",
+  validate(v.getAvailableContent),
+  Auth.authenticateInternal,
+  controller.getAvailable,
+);
+
 module.exports = router;

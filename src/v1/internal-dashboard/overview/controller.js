@@ -75,4 +75,30 @@ const updateStatus = async (req, res) => {
   }
 };
 
-module.exports = { list, getOne, create, update, remove, updateStatus };
+const getAvailable = async (req, res) => {
+  try {
+    const result = await service.getAvailableContent(
+      req.params.type,
+      req.query,
+    );
+    if (!result.success) return respondFailure(res, result);
+    return customResponse(
+      res,
+      200,
+      `Available ${req.params.type}s fetched.`,
+      result.data,
+    );
+  } catch (error) {
+    return respondUnexpected(res, "getAvailable", error);
+  }
+};
+
+module.exports = {
+  list,
+  getOne,
+  create,
+  update,
+  remove,
+  updateStatus,
+  getAvailable,
+};

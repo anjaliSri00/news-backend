@@ -12,30 +12,33 @@ const formatDate = (date) => {
 };
 
 // 🚀 Helper: Fetches article from its specific table based on the type
+const TABLE_MAP = {
+  project: "projects",
+  trend: "trends",
+  designer: "designers",
+  design_tech: "design_tech",
+  product: "products",
+  furniture: "furniture",
+  event: "events",
+  editorial: "editorials",
+  home_decor: "home_decor",
+  news: "news",
+  showroom: "showroom_showcases",
+};
+
 const fetchArticle = async (type, id) => {
   if (!type || !id) return null;
 
-  const tableMap = {
-    project: "projects",
-    trend: "trends",
-    designer: "designers",
-    design_tech: "design_tech",
-    product: "products",
-    furniture: "furniture",
-    event: "events",
-    editorial: "editorials",
-  };
-
-  const tableName = tableMap[type];
+  const tableName = TABLE_MAP[type];
   if (!tableName) return null;
 
   const row = await knex(tableName)
     .where({ id: id, status: "published", is_active: true })
+    .whereNull("deleted_at") // Important for tables that have soft deletes
     .first();
 
   return row ? { ...row, _type: type } : null;
 };
-
 const getHomeOverview = async () => {
   try {
     // 1. Fetch latest published layout
