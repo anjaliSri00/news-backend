@@ -4,7 +4,7 @@ const router = express.Router();
 //const validationArray = require("../../validations/commonRouteValidations");
 //const userValidations = require("../../validations/userValidations");
 //const validate = require("../../middlewares/validatorError");
-const { uploadImage, notifyEmail } = require("./controller");
+const { uploadImage } = require("./controller");
 const { upload } = require("../../middlewares/uploadFile");
 //const { mobileOtpVerification } = require("../../common/otpService");
 

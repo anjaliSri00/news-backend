@@ -1,9 +1,9 @@
 //const { uploadImageToMinIO } = require('../../common/minio');
 const { uploadImageToS3 } = require("../../common/s3");
 const customResponse = require('../../utils/responseHandler');
-const responseMessages = require('../../utils/responseMessage');
-const sendEmail = require('../../common/emailService');
-const sgMail = require('@sendgrid/mail');
+const responseMessages = require('../../utils/responseMessages');
+//const sendEmail = require('../../common/emailService');
+//const sgMail = require('@sendgrid/mail');
 
 const uploadImage = async (req, res) => {
   try {
@@ -43,27 +43,27 @@ const uploadImage = async (req, res) => {
   }
 };
 
-const notifyEmail = async (req, res) => {
-  try {
-    const { email } = req.body;
-    const message = `Query from ${email} on coming soon page of our website`;
-    const to = "zuhouzofficial@gmail.com";
-    const subject = "Coming Soon";
-    await sendEmail(
-        to,
-        subject,
-        `<p>${message}</p>`
-      );
+// const notifyEmail = async (req, res) => {
+//   try {
+//     const { email } = req.body;
+//     const message = `Query from ${email} on coming soon page of our website`;
+//     const to = "zuhouzofficial@gmail.com";
+//     const subject = "Coming Soon";
+//     await sendEmail(
+//         to,
+//         subject,
+//         `<p>${message}</p>`
+//       );
 
-    return customResponse(res, 200, "Email sent successfully", {});
-  } catch (error) {
-    console.error("Error sending email:", error);
-    return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
-  }
-};
+//     return customResponse(res, 200, "Email sent successfully", {});
+//   } catch (error) {
+//     console.error("Error sending email:", error);
+//     return customResponse(res, 500, responseMessages.INTERNAL_SERVER_ERROR, {});
+//   }
+// };
 
 
 module.exports = {
   uploadImage,
-  notifyEmail,
+  //notifyEmail,
 };
