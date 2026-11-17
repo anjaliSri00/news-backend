@@ -1,9 +1,9 @@
 const express = require("express"); // Import express
 const router = express.Router();
-const Auth = require("../../middlewares/auth");
-const validationArray = require("../../validations/commonRouteValidations");
-const userValidations = require("../../validations/userValidations");
-const validate = require("../../middlewares/validatorError");
+//const Auth = require("../../middlewares/auth");
+//const validationArray = require("../../validations/commonRouteValidations");
+//const userValidations = require("../../validations/userValidations");
+//const validate = require("../../middlewares/validatorError");
 const { uploadImage, notifyEmail } = require("./controller");
 const { upload } = require("../../middlewares/uploadFile");
 //const { mobileOtpVerification } = require("../../common/otpService");
