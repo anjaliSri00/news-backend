@@ -27,6 +27,10 @@ const editorialsRoutes = require("./editorials/route");
 const internalDashboardEditorialsRoutes = require("./internal-dashboard/editorials/route");
 const overviewRoutes = require("./overview/route");
 const internalDashboardOverviewRoutes = require("./internal-dashboard/overview/route");
+const commonRoutes = require("./common/route");
+
+// ─── Common Routes ────────────────────────────────────────
+router.use("/common", commonRoutes);
 
 // ─── Public ───────────────────────────────────────────────
 router.use("/users", usersRoutes);
