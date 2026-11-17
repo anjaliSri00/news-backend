@@ -1,4 +1,4 @@
-const { uploadImageToMinIO } = require('../../common/minio');
+//const { uploadImageToMinIO } = require('../../common/minio');
 const { uploadImageToS3 } = require("../../common/s3");
 const customResponse = require('../../utils/responseHandler');
 const responseMessages = require('../../utils/responseMessage');
