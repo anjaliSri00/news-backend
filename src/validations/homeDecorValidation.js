@@ -30,7 +30,7 @@ const createHomeDecor = [
 
   body("featured_image")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Featured image must be a valid URL"),
 
   body("category")
@@ -125,7 +125,7 @@ const updateHomeDecor = [
     .matches(slugPattern),
   body("excerpt").optional({ nullable: true }).isLength({ max: 500 }),
   body("content").optional().notEmpty(),
-  body("featured_image").optional({ nullable: true, checkFalsy: true }).isURL(),
+  body("featured_image").optional({ nullable: true, checkFalsy: true }).isString(),
   body("category")
     .optional({ nullable: true, checkFalsy: true })
     .isLength({ max: 120 }),
