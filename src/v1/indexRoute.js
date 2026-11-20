@@ -29,6 +29,7 @@ const overviewRoutes = require("./overview/route");
 const internalDashboardOverviewRoutes = require("./internal-dashboard/overview/route");
 const commonRoutes = require("./common/route");
 const contactRoutes = require("./contact/route");
+const internalDashboardContactRoutes = require("./internal-dashboard/contact/route");
 
 // ─── Common Routes ────────────────────────────────────────
 router.use("/common", commonRoutes);
