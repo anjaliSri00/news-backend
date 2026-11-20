@@ -28,6 +28,7 @@ const internalDashboardEditorialsRoutes = require("./internal-dashboard/editoria
 const overviewRoutes = require("./overview/route");
 const internalDashboardOverviewRoutes = require("./internal-dashboard/overview/route");
 const commonRoutes = require("./common/route");
+const contactRoutes = require("./contact/route");
 
 // ─── Common Routes ────────────────────────────────────────
 router.use("/common", commonRoutes);
@@ -46,6 +47,7 @@ router.use("/projects", projectsRoutes);
 router.use("/showrooms", showroomsRoutes);
 router.use("/editorials", editorialsRoutes);
 router.use("/overview", overviewRoutes);
+router.use("/contact", contactRoutes);
 
 // ─── Internal Dashboard ───────────────────────────────────
 router.use("/internal-dashboard/users", internalDashboardUsersRoutes);
@@ -61,5 +63,6 @@ router.use("/internal-dashboard/projects", internalDashboardProjectsRoutes);
 router.use("/internal-dashboard/showrooms", internalDashboardShowroomsRoutes);
 router.use("/internal-dashboard/editorials", internalDashboardEditorialsRoutes);
 router.use("/internal-dashboard/overview", internalDashboardOverviewRoutes);
+router.use("/internal-dashboard/contact", internalDashboardContactRoutes);
 
 module.exports = router;
