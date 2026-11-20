@@ -387,6 +387,19 @@ const responseMessages = {
     "Status must be one of: draft, published, archived.",
   EDITORIAL_CODE_GEN_FAILED:
     "Could not generate unique code/slug. Please try again.",
+
+    /* ══════════════════════════════════════════════════════════
+   * CONTACT MESSAGES
+   * ══════════════════════════════════════════════════════════ */
+  CONTACT_SUBMITTED: "Message sent successfully. We will get back to you soon.",
+  CONTACT_FETCHED: "Contact message fetched.",
+  CONTACTS_FETCHED: "Contact messages fetched.",
+  CONTACT_DELETED: "Contact message deleted.",
+  CONTACT_STATUS_UPDATED: "Contact message status updated.",
+  CONTACT_NOT_FOUND: "Contact message not found.",
+  CONTACT_INVALID_ID: "Invalid contact message id.",
+  CONTACT_NO_CHANGES: "No valid fields to update.",
+  
 };
 
 module.exports = responseMessages;
