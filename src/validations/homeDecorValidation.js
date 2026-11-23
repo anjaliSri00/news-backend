@@ -84,7 +84,7 @@ const createHomeDecor = [
 
   body("gallery.*.url")
     .optional()
-    .isURL()
+    .isString()
     .withMessage("Each gallery item must have a valid URL"),
 
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
@@ -150,7 +150,7 @@ const updateHomeDecor = [
   body("tags").optional().isArray(),
   body("tags.*").optional().isString().isLength({ min: 1, max: 50 }),
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
   body("products_used").optional().isArray(),

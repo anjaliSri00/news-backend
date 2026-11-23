@@ -129,10 +129,10 @@ const createProduct = [
 
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL(),
+    .isString(),
 
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
 
@@ -222,9 +222,9 @@ const updateProduct = [
     .isLength({ max: 200 }),
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL(),
+    .isString(),
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
   body("layout_type")

@@ -98,10 +98,10 @@ const createTrend = [
   body("related_trend_ids.*").optional().isUUID().withMessage("Each related_trend_id must be a valid UUID"),
 
   body("featured_image_url")
-    .optional({ nullable: true, checkFalsy: true }).isURL(),
+    .optional({ nullable: true, checkFalsy: true }).isString(),
 
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
 
@@ -144,9 +144,9 @@ const updateTrend = [
   body("sources.*").optional().isString().isLength({ min: 1, max: 500 }),
   body("related_trend_ids").optional().isArray(),
   body("related_trend_ids.*").optional().isUUID(),
-  body("featured_image_url").optional({ nullable: true, checkFalsy: true }).isURL(),
+  body("featured_image_url").optional({ nullable: true, checkFalsy: true }).isString(),
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
   body("layout_type").optional({ nullable: true, checkFalsy: true }).isLength({ max: 20 }),

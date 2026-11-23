@@ -65,24 +65,24 @@ const createDesigner = [
 
   body("portfolio_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Portfolio URL must be valid"),
 
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Featured image URL must be valid"),
 
   body("avatar_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Avatar URL must be valid"),
 
   body("gallery").optional().isArray().withMessage("Gallery must be an array"),
 
   body("gallery.*.url")
     .optional()
-    .isURL()
+    .isString()
     .withMessage("Each gallery item must have a valid URL"),
 
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
@@ -145,11 +145,11 @@ const updateDesigner = [
     .optional({ nullable: true, checkFalsy: true })
     .trim()
     .isLength({ max: 200 }),
-  body("portfolio_url").optional({ nullable: true, checkFalsy: true }).isURL(),
+  body("portfolio_url").optional({ nullable: true, checkFalsy: true }).isString(),
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL(),
-  body("avatar_url").optional({ nullable: true, checkFalsy: true }).isURL(),
+    .isString(),
+  body("avatar_url").optional({ nullable: true, checkFalsy: true }).isString(),
   body("gallery").optional().isArray(),
   body("gallery.*.url").optional().isURL(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),

@@ -33,7 +33,7 @@ const createEvent = [
 
   body("featured_image")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Featured image must be a valid URL"),
 
   body("category")
@@ -109,7 +109,7 @@ const createEvent = [
 
   body("gallery.*.url")
     .optional()
-    .isURL()
+    .isString()
     .withMessage("Each gallery item must have a valid URL"),
 
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
@@ -138,7 +138,7 @@ const updateEvent = [
 
   body("excerpt").optional({ nullable: true }).isLength({ max: 500 }),
   body("content").optional().notEmpty(),
-  body("featured_image").optional({ nullable: true, checkFalsy: true }).isURL(),
+  body("featured_image").optional({ nullable: true, checkFalsy: true }).isString(),
   body("category")
     .optional({ nullable: true, checkFalsy: true })
     .isLength({ max: 120 }),
@@ -174,7 +174,7 @@ const updateEvent = [
   body("tags").optional().isArray(),
   body("tags.*").optional().isString().isLength({ min: 1, max: 50 }),
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
   body("seo").optional().isObject(),

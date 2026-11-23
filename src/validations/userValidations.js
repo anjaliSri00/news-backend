@@ -45,7 +45,7 @@ const updateProfile = [
     .trim()
     .matches(MOBILE_REGEX)
     .withMessage("Mobile must be 8–15 digits, optionally starting with +"),
-  body("avatar").optional().isURL().withMessage("Avatar must be a valid URL"),
+  body("avatar").optional().isString().withMessage("Avatar must be a valid URL"),
   body("bio").optional().isLength({ max: 500 }),
   body("job_title").optional().isLength({ max: 120 }),
 ];

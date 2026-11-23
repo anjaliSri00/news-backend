@@ -52,7 +52,7 @@ const createDesignTech = [
 
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Featured image URL must be valid"),
 
   body("layout_type")
@@ -89,7 +89,7 @@ const updateDesignTech = [
   body("category.*").optional().isString().isLength({ min: 1, max: 100 }),
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL(),
+    .isString(),
   body("layout_type")
     .optional({ nullable: true, checkFalsy: true })
     .isLength({ max: 20 }),

@@ -52,7 +52,7 @@ const createNews = [
 
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL()
+    .isString()
     .withMessage("Featured image URL must be valid"),
 
   body("source")
@@ -101,7 +101,7 @@ const updateNews = [
   body("news_type").optional().isIn(NEWS_TYPES),
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL(),
+    .isString(),
   body("source")
     .optional({ nullable: true, checkFalsy: true })
     .isLength({ max: 200 }),

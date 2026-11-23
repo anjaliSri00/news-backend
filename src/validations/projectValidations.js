@@ -95,7 +95,7 @@ const createProject = [
   body("awards.*").optional().isString().isLength({ min: 1, max: 200 }),
 
   body("floor_plans").optional().isArray(),
-  body("floor_plans.*.url").optional().isURL(),
+  body("floor_plans.*.url").optional().isString(),
   body("floor_plans.*.title").optional({ nullable: true }).isString(),
   body("floor_plans.*.level").optional({ nullable: true }).isString(),
 
@@ -106,10 +106,10 @@ const createProject = [
     .isLength({ max: 100 }),
   body("featured_image_url")
     .optional({ nullable: true, checkFalsy: true })
-    .isURL(),
+    .isString(),
 
   body("gallery").optional().isArray(),
-  body("gallery.*.url").optional().isURL(),
+  body("gallery.*.url").optional().isString(),
   body("gallery.*.alt").optional({ nullable: true }).isLength({ max: 300 }),
   body("gallery.*.caption").optional({ nullable: true }).isLength({ max: 500 }),
 
