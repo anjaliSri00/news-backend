@@ -84,8 +84,7 @@ const getAvailableContent = async (type, query) => {
     const skip = (page - 1) * limit;
 
     const qb = knex(tableName)
-      .where({ status: "published", is_active: true })
-      .whereNull("deleted_at");
+      .where({ status: "published" })
 
     if (query.search) {
       const term = `%${query.search}%`;
