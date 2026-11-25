@@ -25,6 +25,11 @@ const CODE_MESSAGE_MAP = {
   INVALID_CREDENTIALS: responseMessages.INVALID_CREDENTIALS,
   USER_NOT_FOUND: responseMessages.USER_NOT_FOUND,
   SERVER_ERROR: responseMessages.INTERNAL_SERVER_ERROR,
+  INVALID_INPUT: responseMessages.USER_INVALID_ID || "Invalid user id.",
+  NO_CHANGES: responseMessages.NO_VALID_FIELDS || "No valid fields to update.",
+  INVALID_USER_TYPE: "Invalid user type.",
+  EMAIL_EXISTS: responseMessages.EMAIL_ALREADY_EXISTS,
+  MOBILE_EXISTS: responseMessages.MOBILE_ALREADY_EXISTS,
 };
 
 const respondFailure = (res, result) => {
@@ -211,6 +216,21 @@ const userAccess = async (req, res) => {
   });
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const result = await internalAuthService.updateUser(req.params.id, req.body);
+    if (!result.success) return respondFailure(res, result);
+    
+    return customResponse(res, 200, "User updated successfully.", {
+      user: result.data,
+    });
+  } catch (error) {
+    return respondUnexpected(res, "updateUser", error);
+  }
+};
+
+
+
 module.exports = {
   // Auth
   login,
@@ -225,4 +245,6 @@ module.exports = {
   grantAccess,
   revokeAccess,
   userAccess,
+  // Update user
+  updateUser,
 };

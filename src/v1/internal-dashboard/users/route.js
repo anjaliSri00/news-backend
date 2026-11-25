@@ -12,12 +12,13 @@ const {
   grantAccess,
   revokeAccess,
   userAccess,
+  updateUser,
 } = require("./controller");
 
 const Auth = require("../../../middlewares/auth");
 const { requireAccess } = require("../../../middlewares/access");
 const validate = require("../../../middlewares/validatorError");
-const validationArray = require("../../../validations/userValidations");
+const validationArray = require("../../../validations/internalUserValidations");
 
 /* ══════════════════════════════════════════════════════════
  * PUBLIC — no auth required
@@ -68,5 +69,16 @@ router.get(
   Auth.authenticateInternal,
   userAccess,
 );
+
+/* ══════════════════════════════════════════════════════════
+ * UPDATE USER DETAILS
+ * Frontend must send: ?flow_id=<users-flow>&page_id=<users-edit-page>
+ * ══════════════════════════════════════════════════════════ */
+router.put(
+  "/update/:id",
+  validate(validationArray.updateUserInternal),
+  updateUser
+);
+
 
 module.exports = router;

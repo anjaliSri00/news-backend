@@ -721,6 +721,77 @@ const getUserAccess = async (userId) => {
   }
 };
 
+const updateUser = async (userId, payload) => {
+  try {
+    if (!isUUID(userId)) {
+      return { success: false, code: "INVALID_INPUT", message: "Invalid user id." };
+    }
+
+    // 1. Check if user exists
+    const existingUser = await knex("users").where({ id: userId }).whereNull("deleted_at").first();
+    if (!existingUser) {
+      return { success: false, code: "USER_NOT_FOUND", message: "User not found." };
+    }
+
+    // 2. Validate Email Uniqueness (if changed)
+    if (payload.email && payload.email !== existingUser.email) {
+      const emailCheck = await knex("users").where({ email: payload.email }).whereNot({ id: userId }).first();
+      if (emailCheck) {
+        return { success: false, code: "EMAIL_EXISTS", message: "This email is already in use by another account." };
+      }
+    }
+
+    // 3. Validate Mobile Uniqueness (if changed and provided)
+    if (payload.mobile && payload.mobile !== existingUser.mobile) {
+      const mobileCheck = await knex("users").where({ mobile: payload.mobile }).whereNot({ id: userId }).first();
+      if (mobileCheck) {
+        return { success: false, code: "MOBILE_EXISTS", message: "This mobile number is already in use." };
+      }
+    }
+
+    // 4. Validate User Type exists (if changed)
+    if (payload.user_type) {
+      const typeCheck = await knex("user_type_enums").where({ id: payload.user_type }).first();
+      if (!typeCheck) {
+        return { success: false, code: "INVALID_USER_TYPE", message: "The selected user type does not exist." };
+      }
+    }
+
+    // 5. Build update object (only allow whitelisted fields)
+    const allowedFields = [
+      "name", "email", "mobile", "user_type", 
+      "is_active", "is_superadmin", "job_title", "bio", "avatar"
+    ];
+    
+    const updates = {};
+    for (const field of allowedFields) {
+      if (payload[field] !== undefined) {
+        updates[field] = payload[field];
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return { success: false, code: "NO_CHANGES", message: "No valid fields to update." };
+    }
+
+    updates.updated_at = knex.fn.now();
+
+    // 6. Apply Update
+    const [updatedUser] = await knex("users")
+      .where({ id: userId })
+      .update(updates)
+      .returning([
+        "id", "code", "name", "email", "mobile", "user_type", 
+        "is_active", "is_superadmin", "job_title", "bio", "avatar", "updated_at"
+      ]);
+
+    return { success: true, data: updatedUser };
+  } catch (error) {
+    logger.error("internal updateUser error", { error: error.message });
+    return { success: false, code: "SERVER_ERROR", message: "Failed to update user." };
+  }
+};
+
 module.exports = {
   findUserById,
   internalLogin,
@@ -732,4 +803,5 @@ module.exports = {
   grantAccess,
   revokeAccess,
   getUserAccess,
+  updateUser,
 };
