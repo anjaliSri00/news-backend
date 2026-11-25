@@ -47,6 +47,17 @@ router.post("/add", Auth.authenticateInternal, create);
 router.delete("/:id", Auth.authenticateInternal, revoke);
 
 /* ══════════════════════════════════════════════════════════
+ * UPDATE USER DETAILS
+ * Frontend must send: ?flow_id=<users-flow>&page_id=<users-edit-page>
+ * ══════════════════════════════════════════════════════════ */
+router.put(
+  "/update/:id",
+  Auth.authenticateInternal,
+  validate(validationArray.updateUserInternal),
+  updateUser
+);
+
+/* ══════════════════════════════════════════════════════════
  * ACCESS MANAGEMENT — requires users flow/page access
  *
  * Frontend must send query:
@@ -70,15 +81,6 @@ router.get(
   userAccess,
 );
 
-/* ══════════════════════════════════════════════════════════
- * UPDATE USER DETAILS
- * Frontend must send: ?flow_id=<users-flow>&page_id=<users-edit-page>
- * ══════════════════════════════════════════════════════════ */
-router.put(
-  "/update/:id",
-  validate(validationArray.updateUserInternal),
-  updateUser
-);
 
 
 module.exports = router;
